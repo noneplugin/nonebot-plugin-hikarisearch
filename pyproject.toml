@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "nonebot_plugin_hikarisearch"
+version = "0.1.0"
+description = "基于 HikariSearch 的又一个 Nonebot2 搜图插件"
+authors = ["meetwq <meetwq@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/MeetWq/nonebot-plugin-hikarisearch"
+repository = "https://github.com/MeetWq/nonebot-plugin-hikarisearch"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+httpx = ">=0.19.0"
+nonebot2 = "^2.0.0-beta.2"
+nonebot-adapter-onebot = "^2.0.0-beta.2"
+
+[tool.poetry.dev-dependencies]
+nb-cli = "^0.6.0"
+black = "^22.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
