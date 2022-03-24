@@ -31,6 +31,7 @@ pip install nonebot_plugin_hikarisearch
 
 或回复包含图片的消息，回复搜图
 
+或 搜图上一张，搜索上一次出现的图
 
 ### 配置
 

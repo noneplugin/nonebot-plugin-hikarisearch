@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot_plugin_hikarisearch"
-version = "0.1.1"
+version = "0.1.2"
 description = "基于 HikariSearch 的又一个 Nonebot2 搜图插件"
 authors = ["meetwq <meetwq@gmail.com>"]
 license = "MIT"

@@ -81,7 +81,7 @@ async def search_tracemoe(image: bytes) -> List[Message]:
 async def post(url, data: dict, image: bytes) -> dict:
     files = {"image": image}
     async with httpx.AsyncClient() as client:
-        resp = await client.post(API + url, data=data, files=files, timeout=10)
+        resp = await client.post(API + url, data=data, files=files, timeout=20)
         return resp.json()
 
 
@@ -109,9 +109,9 @@ class Source:
 
 
 sources = [
-    Source("SauceNAO", ("saucenao", "nao", ""), search_saucenao),
-    Source("IqDB", ("iqdb",), search_iqdb),
+    Source("SauceNAO", ("saucenao", "SauceNAO", "nao", ""), search_saucenao),
+    Source("IqDB", ("iqdb", "IqDB", "IQDB"), search_iqdb),
     Source("ascii2d", ("ascii2d", "asc"), search_ascii2d),
-    Source("E-Hentai", ("ehentai", "e-hentai", "eh"), search_ehentai),
-    Source("TraceMoe", ("tracemoe", "trace"), search_tracemoe),
+    Source("E-Hentai", ("ehentai", "E-Hentai", "e-hentai", "eh"), search_ehentai),
+    Source("TraceMoe", ("tracemoe", "TraceMoe", "trace"), search_tracemoe),
 ]

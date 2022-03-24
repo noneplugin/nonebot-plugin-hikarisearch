@@ -1,10 +1,11 @@
 import asyncio
 import traceback
-from typing import List
-from nonebot import on_startswith
+from typing import List, Dict
+from nonebot import on_command
 from nonebot.matcher import Matcher
-from nonebot.params import EventMessage
 from nonebot.typing import T_Handler, T_State
+from nonebot.message import event_postprocessor
+from nonebot.params import EventMessage, CommandArg
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageEvent, GroupMessageEvent
 from nonebot.log import logger
 
@@ -19,13 +20,35 @@ __cmd__ = f"""
 搜图 / {options} + 图片
 默认为saucenao搜图
 或回复图片消息 搜图
+或 搜图上一张，搜索上一次出现的图
 """.strip()
 __short_cmd__ = "搜图 [图片]"
 __usage__ = f"{__des__}\nUsage:\n{__cmd__}"
 
 
+last_img: Dict[str, str] = {}
+
+
+def get_cid(event: MessageEvent):
+    return (
+        f"group_{event.group_id}"
+        if isinstance(event, GroupMessageEvent)
+        else f"private_{event.user_id}"
+    )
+
+
+@event_postprocessor
+async def save_last_img(event: MessageEvent, msg: Message = EventMessage()):
+    cid = get_cid(event)
+    if imgs := msg["image"]:
+        last_img.update({cid: imgs[-1].data["url"]})
+
+
 def get_img_url(
-    event: MessageEvent, state: T_State, msg: Message = EventMessage()
+    event: MessageEvent,
+    state: T_State,
+    msg: Message = EventMessage(),
+    arg: Message = CommandArg(),
 ) -> bool:
     img_url = ""
     if event.reply:
@@ -33,6 +56,10 @@ def get_img_url(
             img_url = imgs[0].data["url"]
     elif imgs := msg["image"]:
         img_url = imgs[0].data["url"]
+    if not img_url:
+        if arg.extract_plain_text().strip().startswith("上一张"):
+            cid = get_cid(event)
+            img_url = last_img.get(cid, "")
     if img_url:
         state["img_url"] = img_url
         return True
@@ -73,8 +100,12 @@ def create_matchers():
         return handler
 
     for source in sources:
-        on_startswith(
-            source.commands, get_img_url, ignorecase=True, block=True, priority=13
+        on_command(
+            source.commands[0],
+            get_img_url,
+            aliases=set(source.commands),
+            block=True,
+            priority=13,
         ).append_handler(create_handler(source))
 
 
