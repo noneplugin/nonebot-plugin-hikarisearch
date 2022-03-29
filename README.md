@@ -24,6 +24,8 @@ pip install nonebot_plugin_hikarisearch
 
 ### 使用
 
+**以下命令需要加[命令前缀](https://v2.nonebot.dev/docs/api/config#Config-command_start) (默认为`/`)，可自行设置为空**
+
 ```
 搜图/saucenao搜图/iqdb搜图/ascii2d搜图/ehentai搜图/tracemoe搜图 + 图片
 ```
