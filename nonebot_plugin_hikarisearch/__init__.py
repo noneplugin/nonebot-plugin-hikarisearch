@@ -5,7 +5,7 @@ from nonebot import on_command
 from nonebot.matcher import Matcher
 from nonebot.typing import T_Handler, T_State
 from nonebot.message import event_postprocessor
-from nonebot.params import EventMessage, CommandArg
+from nonebot.params import EventMessage, CommandArg, State
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageEvent, GroupMessageEvent
 from nonebot.log import logger
 
@@ -46,7 +46,7 @@ async def save_last_img(event: MessageEvent, msg: Message = EventMessage()):
 
 def get_img_url(
     event: MessageEvent,
-    state: T_State,
+    state: T_State = State(),
     msg: Message = EventMessage(),
     arg: Message = CommandArg(),
 ) -> bool:
@@ -69,7 +69,7 @@ def get_img_url(
 def create_matchers():
     def create_handler(source: Source) -> T_Handler:
         async def handler(
-            bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State
+            bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State = State()
         ):
             img_url: str = state["img_url"]
 
