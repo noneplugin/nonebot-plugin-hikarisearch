@@ -87,13 +87,7 @@ def create_matchers():
 
             help_msg = f"当前搜索引擎：{source.name}\n可使用 {options} 命令使用其他引擎搜索"
             if res:
-                await send_msg(
-                    bot,
-                    matcher,
-                    event,
-                    res[: hikari_config.hikarisearch_max_results],
-                    help_msg,
-                )
+                await send_msg(bot, matcher, event, res, help_msg)
             else:
                 await matcher.finish(f"{source.name} 中未找到匹配的图片")
 
@@ -112,9 +106,54 @@ def create_matchers():
 create_matchers()
 
 
+async def handler(
+    bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State = State()
+):
+    img_url: str = state["img_url"]
+
+    try:
+        img = await download_image(img_url)
+    except:
+        logger.warning(traceback.format_exc())
+        await matcher.finish("图片下载出错，请稍后再试")
+
+    res: List[Message] = []
+    help_msg = ""
+    for source in sources:
+        try:
+            res = await source.func(img)
+            if res:
+                help_msg = f"当前搜索引擎：{source.name}\n可使用 {options} 命令使用其他引擎搜索"
+                break
+            else:
+                logger.info(f"{source.name} 中未找到匹配的图片")
+        except:
+            logger.warning(f"{source.name} 搜索出错")
+
+    if not res:
+        await matcher.finish("出错了，请稍后再试")
+
+    await send_msg(bot, matcher, event, res, help_msg)
+
+
+on_command(
+    "搜图", get_img_url, aliases={"以图搜图", "识图"}, block=True, priority=13
+).append_handler(handler)
+
+
+async def help_handler(matcher: Matcher):
+    await matcher.finish(__usage__)
+
+
+on_command("搜图帮助", aliases={"帮助搜图"}, block=True, priority=13).append_handler(
+    help_handler
+)
+
+
 async def send_msg(
     bot: Bot, matcher: Matcher, event: MessageEvent, msgs: List[Message], help_msg: str
 ):
+    msgs = msgs[: hikari_config.hikarisearch_max_results]
     if isinstance(event, GroupMessageEvent) and len(msgs) > 1:
         msgs.insert(0, Message(help_msg))
         await send_forward_msg(bot, event, "HikariSearch", bot.self_id, msgs)

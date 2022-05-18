@@ -109,9 +109,9 @@ class Source:
 
 
 sources = [
-    Source("SauceNAO", ("saucenao", "SauceNAO", "nao", ""), search_saucenao),
+    Source("SauceNAO", ("saucenao", "SauceNAO", "sauce", "nao"), search_saucenao),
+    Source("ascii2d", ("ascii2d", "ascii", "asc"), search_ascii2d),
     Source("IqDB", ("iqdb", "IqDB", "IQDB"), search_iqdb),
-    Source("ascii2d", ("ascii2d", "asc"), search_ascii2d),
     Source("E-Hentai", ("ehentai", "E-Hentai", "e-hentai", "eh"), search_ehentai),
     Source("TraceMoe", ("tracemoe", "TraceMoe", "trace"), search_tracemoe),
 ]
