@@ -3,27 +3,30 @@ import traceback
 from typing import List, Dict
 from nonebot import on_command
 from nonebot.matcher import Matcher
+from nonebot.plugin import PluginMetadata
 from nonebot.typing import T_Handler, T_State
 from nonebot.message import event_postprocessor
 from nonebot.params import EventMessage, CommandArg, State
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageEvent, GroupMessageEvent
 from nonebot.log import logger
 
+from .config import hikari_config, Config
 from .data_source import sources, Source, download_image
-from .config import hikari_config
 
-
-__help__plugin_name__ = "imgsearch"
-__des__ = "搜图"
 options = " / ".join([source.commands[0] for source in sources])
-__cmd__ = f"""
-搜图 / {options} + 图片
-默认为saucenao搜图
-或回复图片消息 搜图
-或 搜图上一张，搜索上一次出现的图
-""".strip()
-__short_cmd__ = "搜图 [图片]"
-__usage__ = f"{__des__}\nUsage:\n{__cmd__}"
+
+__plugin_meta__ = PluginMetadata(
+    name="搜图",
+    description="HikariSearch 动漫图片聚合搜索",
+    usage=(f"搜图 / {options} + 图片\n默认为saucenao搜图\n或回复图片消息 搜图\n或 搜图上一张，搜索上一次出现的图"),
+    config=Config,
+    extra={
+        "unique_name": "hikarisearch",
+        "example": "搜图 [图片]",
+        "author": "meetwq <meetwq@gmail.com>",
+        "version": "0.1.5",
+    },
+)
 
 
 last_img: Dict[str, str] = {}
@@ -142,7 +145,7 @@ on_command(
 
 
 async def help_handler(matcher: Matcher):
-    await matcher.finish(__usage__)
+    await matcher.finish(__plugin_meta__.usage)
 
 
 on_command("搜图帮助", aliases={"帮助搜图"}, block=True, priority=13).append_handler(
