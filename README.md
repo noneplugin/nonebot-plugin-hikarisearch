@@ -31,9 +31,8 @@ pip install nonebot_plugin_hikarisearch
 ```
 默认为 saucenao搜图
 
-或回复包含图片的消息，回复搜图
+或回复包含图片的消息，回复“搜图”
 
-或 搜图上一张，搜索上一次出现的图
 
 ### 配置
 
@@ -42,8 +41,5 @@ pip install nonebot_plugin_hikarisearch
 ```
 hikarisearch_api=xxx  # HikariSearch 站点，默认为 "https://hikari.obfs.dev"
 hikarisearch_max_results=xxx  # 最多返回的结果数量，默认为 3
+hikarisearch_withdraw=xxx  # 自动撤回时间，默认为 0 (不撤回)，单位为秒
 ```
-
-在群聊中，当搜索结果数量>1时，结果以合并转发的形式发出
-
-私聊时，搜索结果会逐个发出
