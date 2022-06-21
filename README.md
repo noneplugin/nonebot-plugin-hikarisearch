@@ -21,6 +21,10 @@ nb plugin install nonebot_plugin_hikarisearch
 pip install nonebot_plugin_hikarisearch
 ```
 
+本插件使用了 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp) 的 `send_group_forward_msg` 和 `send_private_forward_msg` 接口 来发送合并转发消息，
+
+发送私聊合并转发消息需要使用 `v1.0.0-rc2` 版本以上的 go-cqhttp
+
 
 ### 使用
 
