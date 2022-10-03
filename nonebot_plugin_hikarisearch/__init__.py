@@ -5,7 +5,7 @@ from nonebot import on_command
 from nonebot.matcher import Matcher
 from nonebot.plugin import PluginMetadata
 from nonebot.typing import T_Handler, T_State
-from nonebot.params import EventMessage, State, Depends
+from nonebot.params import EventMessage, Depends
 from nonebot.adapters.onebot.v11 import Bot, Message, MessageEvent, GroupMessageEvent
 from nonebot.log import logger
 
@@ -23,7 +23,7 @@ __plugin_meta__ = PluginMetadata(
         "unique_name": "hikarisearch",
         "example": "搜图 [图片]",
         "author": "meetwq <meetwq@gmail.com>",
-        "version": "0.1.6",
+        "version": "0.1.7",
     },
 )
 
@@ -40,7 +40,7 @@ def get_img_url():
     async def dependency(
         matcher: Matcher,
         event: MessageEvent,
-        state: T_State = State(),
+        state: T_State,
         msg: Message = EventMessage(),
     ):
         img_url = ""
@@ -60,7 +60,7 @@ def get_img_url():
 def create_matchers():
     def create_handler(source: Source) -> T_Handler:
         async def handler(
-            bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State = State()
+            bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State
         ):
             img_url: str = state["img_url"]
 
@@ -96,9 +96,7 @@ def create_matchers():
 create_matchers()
 
 
-async def handler(
-    bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State = State()
-):
+async def handler(bot: Bot, matcher: Matcher, event: MessageEvent, state: T_State):
     img_url: str = state["img_url"]
 
     try:
