@@ -17,7 +17,8 @@ async def search_saucenao(image: bytes) -> List[Message]:
             res["title"],
             res["similarity"],
             "\n".join(
-                ["\n".join(dict(content).values()) for content in res["content"]]
+                ["\n".join(dict(content).values())
+                 for content in res["content"]]
             ),
         )
         for res in result
@@ -52,8 +53,24 @@ async def search_ascii2d(image: bytes) -> List[Message]:
     ]
 
 
+async def search_ascii2d_bovw(image: bytes) -> List[Message]:
+    data = {"type": "bovw"}
+    result = await post("/api/ascii2d", data, image)
+    return [
+        MessageSegment.image(res["image"])
+        + "图片来源: {}\n{}\n图片作者: {}\n{}".format(
+            res["source"]["text"],
+            res["source"]["link"],
+            res["author"]["text"],
+            res["author"]["link"],
+        )
+        for res in result
+    ]
+
+
 async def search_ehentai(image: bytes) -> List[Message]:
-    data = {"site": "eh", "cover": "false", "deleted": "false", "similar": "true"}
+    data = {"site": "eh", "cover": "false",
+            "deleted": "false", "similar": "true"}
     result = await post("/api/E-Hentai", data, image)
     return [
         MessageSegment.image(res["image"])
@@ -104,13 +121,15 @@ class Source:
 
     def __post_init__(self):
         self.commands: Tuple[str] = tuple(
-            sum(([keyword + "搜图", "搜图" + keyword] for keyword in self.keywords), [])
+            sum(([keyword + "搜图", "搜图" + keyword]
+                for keyword in self.keywords), [])
         )
 
 
 sources = [
     Source("SauceNAO", ("saucenao", "SauceNAO", "sauce", "nao"), search_saucenao),
     Source("ascii2d", ("ascii2d", "ascii", "asc"), search_ascii2d),
+    Source("ascii2d_bovw", ("ascii2d特征", "ascii特征", "特征"), search_ascii2d_bovw),
     Source("IqDB", ("iqdb", "IqDB", "IQDB"), search_iqdb),
     Source("E-Hentai", ("ehentai", "E-Hentai", "e-hentai", "eh"), search_ehentai),
     Source("TraceMoe", ("tracemoe", "TraceMoe", "trace"), search_tracemoe),
