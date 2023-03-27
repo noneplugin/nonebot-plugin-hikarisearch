@@ -43,7 +43,9 @@ pip install nonebot_plugin_hikarisearch
 可在 `.env.xxx` 文件中添加如下配置：
 
 ```
-hikarisearch_api=xxx  # HikariSearch 站点，默认为 "https://hikari.obfs.dev"
-hikarisearch_max_results=xxx  # 最多返回的结果数量，默认为 3
-hikarisearch_withdraw=xxx  # 自动撤回时间，默认为 0 (不撤回)，单位为秒
+hikarisearch_api=xxx        # HikariSearch 站点，默认为 "https://hikari.obfs.dev"
+hikarisearch_max_results=3  # 最多返回的结果数量，默认为 3
+hikarisearch_withdraw=0     # 自动撤回时间，默认为 0 (不撤回)，单位为秒
+hikarisearch_proxy=xxx      # 代理，适用于搜索结果预览图下载
+hikarisearch_thumb=true     # 是否发送搜索结果预览图
 ```
