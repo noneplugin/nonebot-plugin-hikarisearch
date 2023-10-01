@@ -9,7 +9,7 @@ API = hikari_config.hikarisearch_api.strip("/")
 
 
 async def search_saucenao(image: bytes) -> List[Message]:
-    data = {"hide": "true"}
+    data = {"hide": "false"}
     result = await post("/api/SauceNAO", data, image)
     return [
         MessageSegment.image(res["image"])
